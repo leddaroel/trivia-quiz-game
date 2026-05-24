@@ -1,4 +1,5 @@
 # Logs
+<<<<<<< HEAD
 logs
 *.log
 npm-debug.log*
@@ -141,3 +142,23 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+=======
+logs/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build
+dist/
+build/
+
+# Dependencies
+node_modules/
+>>>>>>> d859a39 (Initial commit: Terminal Trivia Quiz Game)

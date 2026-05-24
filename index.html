@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Trivia Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="terminal">
+            <div class="header">
+                <h1>TERMINAL TRIVIA v1.0</h1>
+                <p class="subtitle">Type /help for available commands</p>
+            </div>
+
+            <div class="chat-box" id="chatBox">
+                <div class="message system">
+                    Welcome to Terminal Trivia! Type /start to begin a new game.
+                </div>
+            </div>
+
+            <div class="input-area">
+                <span class="prompt">➜ trivia $</span>
+                <input
+                    type="text"
+                    id="commandInput"
+                    class="input-field"
+                    placeholder="Enter command..."
+                    autocomplete="off"
+                >
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
