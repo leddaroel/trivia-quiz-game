@@ -3,36 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Trivia Quiz</title>
+    <title>Terminal Trivia Quiz - Multiplayer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="terminal">
-            <div class="header">
-                <h1>TERMINAL TRIVIA v1.0</h1>
-                <p class="subtitle">Type /help for available commands</p>
-            </div>
+        <!-- Lobby Screen -->
+        <div id="lobbyScreen" class="screen active">
+            <div class="lobby-container">
+                <div class="lobby-header">
+                    <h1>TERMINAL TRIVIA</h1>
+                    <p>Multiplayer Edition</p>
+                </div>
 
-            <div class="chat-box" id="chatBox">
-                <div class="message system">
-                    Welcome to Terminal Trivia! Type /start to begin a new game.
+                <div class="lobby-content">
+                    <div class="lobby-section">
+                        <h2>Your Name</h2>
+                        <input
+                            type="text"
+                            id="playerNameInput"
+                            placeholder="Enter your name..."
+                            maxlength="20"
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <div class="lobby-divider">OR</div>
+
+                    <div class="lobby-section">
+                        <h3>Create Room</h3>
+                        <button id="createRoomBtn" class="btn btn-primary">Create New Game</button>
+                    </div>
+
+                    <div class="lobby-divider">———</div>
+
+                    <div class="lobby-section">
+                        <h3>Join Room</h3>
+                        <input
+                            type="text"
+                            id="roomCodeInput"
+                            placeholder="Enter room code..."
+                            maxlength="6"
+                            autocomplete="off"
+                        >
+                        <button id="joinRoomBtn" class="btn btn-secondary">Join Game</button>
+                    </div>
+
+                    <div id="lobbyError" class="error-message"></div>
                 </div>
             </div>
+        </div>
 
-            <div class="input-area">
-                <span class="prompt">➜ trivia $</span>
-                <input
-                    type="text"
-                    id="commandInput"
-                    class="input-field"
-                    placeholder="Enter command..."
-                    autocomplete="off"
-                >
+        <!-- Game Lobby (Waiting for Game Start) -->
+        <div id="waitingScreen" class="screen">
+            <div class="game-container">
+                <div class="header">
+                    <h1>ROOM: <span id="displayRoomCode">—</span></h1>
+                    <p class="subtitle">Waiting for players...</p>
+                </div>
+
+                <div class="game-layout">
+                    <div class="players-panel">
+                        <h3>Players (<span id="playerCount">0</span>/20)</h3>
+                        <div id="playersList" class="players-list"></div>
+                        <div id="hostIndicator" class="host-indicator"></div>
+                    </div>
+
+                    <div class="chat-box" id="chatBox">
+                        <div class="message system">
+                            Waiting for host to start the game...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <button id="startGameBtn" class="btn btn-primary full-width" style="display: none;">
+                        Start Game
+                    </button>
+                    <button id="leaveRoomBtn" class="btn btn-secondary full-width">
+                        Leave Room
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-container">
+                <div class="header">
+                    <h1>TERMINAL TRIVIA</h1>
+                    <p class="subtitle" id="questionProgress">Question 1/10</p>
+                </div>
+
+                <div class="game-layout">
+                    <div class="players-panel">
+                        <h3>Scores</h3>
+                        <div id="scoresBoard" class="scores-list"></div>
+                    </div>
+
+                    <div class="chat-box" id="gameChat">
+                        <div id="questionDisplay"></div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <span class="prompt">➜ answer $</span>
+                    <input
+                        type="text"
+                        id="answerInput"
+                        class="input-field"
+                        placeholder="Enter answer number (1-4)..."
+                        autocomplete="off"
+                    >
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="screen">
+            <div class="game-container">
+                <div class="header">
+                    <h1>GAME OVER</h1>
+                    <p class="subtitle">Final Leaderboard</p>
+                </div>
+
+                <div class="leaderboard-container">
+                    <div id="leaderboard" class="leaderboard"></div>
+                </div>
+
+                <div class="input-area">
+                    <button id="playAgainBtn" class="btn btn-primary full-width">
+                        Play Again
+                    </button>
+                    <button id="exitGameBtn" class="btn btn-secondary full-width">
+                        Exit to Lobby
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="game.js"></script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+{
+  "name": "multiplayer-trivia-game",
+  "version": "2.0.0",
+  "description": "Real-time multiplayer trivia quiz game",
+  "scripts": {
+    "start:server": "cd server && node index.js",
+    "dev:server": "cd server && nodemon index.js",
+    "install:deps": "cd server && npm install",
+    "setup": "npm run install:deps"
+  },
+  "keywords": ["trivia", "multiplayer", "game", "socket.io"],
+  "author": "",
+  "license": "MIT"
+}

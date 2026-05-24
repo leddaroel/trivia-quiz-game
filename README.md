@@ -1,168 +1,204 @@
-<<<<<<< HEAD
-# trivia-quiz-game
-A terminal-inspired web-based trivia quiz game
-=======
-# Terminal Trivia Quiz Game
+# Multiplayer Terminal Trivia Quiz Game
 
-A minimalist, terminal-inspired web-based trivia quiz game. Answer general knowledge questions through a chat-like command-line interface.
+A real-time multiplayer trivia quiz game featuring a terminal-inspired UI. Players can join rooms, answer questions simultaneously, and compete on live leaderboards.
 
 ## Features
 
-- 🎮 Command-line interface with `/start`, `/end`, `/score`, etc.
+- 🎮 Real-time multiplayer with WebSocket (Socket.io)
 - 🎯 10 random trivia questions per game from Open Trivia Database
-- 📊 Real-time scoring and accuracy tracking
-- 🎨 Dark terminal UI with syntax highlighting colors
+- 📊 Live score tracking with real-time leaderboards
+- 🚪 Room system with unique codes for easy joining
+- 🎨 Terminal-inspired UI with dark theme
 - 📱 Responsive design for desktop and mobile
-- ⚡ No backend required - runs entirely in the browser
+- ⚡ Server-side answer validation and game state management
 
-## Commands
+## Quick Start
 
-- `/start` - Begin a new trivia game
-- `/end` - End the current game and see final score
-- `/score` - View current game statistics
-- `/answer <number>` - Answer question with option number (1-4)
-- `/a <number>` - Shorthand for `/answer`
-- `/skip` - Skip the current question
-- `/help` - Display all available commands
+### Prerequisites
+
+- Node.js 14+ and npm
+- A modern web browser
+
+### Installation & Setup
+
+1. **Install Node.js** (if not already installed):
+   - Download from https://nodejs.org/
+   - Install the LTS version
+
+2. **Install server dependencies**:
+   ```bash
+   npm run setup
+   # or manually:
+   cd server && npm install
+   ```
+
+3. **Start the server**:
+   ```bash
+   npm run start:server
+   # or for development with auto-reload:
+   npm run dev:server
+   ```
+
+4. **Open the game** in your browser:
+   - Open http://localhost:3000 in your web browser
+   - For local testing, open multiple browser windows/tabs
+   - For remote testing, replace `localhost` with your server's IP address
 
 ## How to Play
 
-1. Type `/start` to begin a new game
-2. Read the question and available options
-3. Type `/answer 1` (or 2, 3, 4) to submit your answer
-4. Get immediate feedback with the correct answer
-5. View your final score with `/score` or at game end
-6. Type `/start` again to play another round
+### Creating a Room
+1. Enter your player name
+2. Click "Create New Game"
+3. Share the room code with other players
 
-## Scoring
+### Joining a Room
+1. Enter your player name
+2. Enter the room code
+3. Click "Join Game"
 
+### Playing the Game
+1. Wait for the host to click "Start Game"
+2. Read each question and the available options
+3. Enter the option number (1-4) and press Enter
+4. See the correct answer and results from all players
+5. Watch your score update in real-time
+6. Complete all 10 questions
+7. View the final leaderboard
+
+## Game Rules
+
+- **30-second timer** per question
 - **10 points** per correct answer
-- Final score = (Correct Answers × 10)
-- Accuracy percentage calculated as: (Correct / Total) × 100
-
-## Technology Stack
-
-- **HTML5** - Structure
-- **CSS3** - Terminal-style design
-- **Vanilla JavaScript** - Game logic
-- **Open Trivia Database API** - Question source
-
-## Deployment to GitHub Pages
-
-### Step 1: Create a GitHub Repository
-
-```bash
-# Initialize git in the project directory
-git init
-
-# Add all files
-git add .
-
-# Create initial commit
-git commit -m "Initial commit: Terminal Trivia Game"
-
-# Create a new repository on GitHub (https://github.com/new)
-# Then push to GitHub (replace username and repo-name)
-git remote add origin https://github.com/your-username/trivia-quiz-game.git
-git branch -M main
-git push -u origin main
-```
-
-### Step 2: Enable GitHub Pages
-
-1. Go to your repository on GitHub
-2. Click **Settings** → **Pages**
-3. Under "Build and deployment", select:
-   - Source: **Deploy from a branch**
-   - Branch: **main**
-   - Folder: **/(root)**
-4. Click **Save**
-
-Your game will be live at: `https://your-username.github.io/trivia-quiz-game/`
-
-### Step 3: Update Repository Settings (Optional)
-
-Add these details to your GitHub repo:
-- **Description**: "A terminal-inspired web-based trivia quiz game"
-- **Homepage**: `https://your-username.github.io/trivia-quiz-game/`
-
-## Local Testing
-
-Simply open `index.html` in your web browser. No build process or server required.
-
-```bash
-# Using Python 3
-python -m http.server 8000
-
-# Using Node.js (with http-server)
-npx http-server
-
-# Or just open in browser
-open index.html
-```
+- **Auto-advance** to next question when all players answer or timeout occurs
+- Host-only game start (prevents random players from starting)
+- **Maximum 20 players** per room
 
 ## File Structure
 
 ```
 trivia-quiz-game/
-├── index.html      # Main HTML structure
-├── style.css       # Terminal UI styling
-├── game.js         # Game logic and command handling
-└── README.md       # This file
+├── index.html          # Main HTML (lobby + game screens)
+├── style.css           # Terminal UI styling
+├── game.js             # Client-side multiplayer logic (Socket.io)
+├── package.json        # Root package scripts
+├── server/
+│   ├── package.json    # Server dependencies
+│   ├── index.js        # Express + Socket.io server
+│   └── GameSession.js  # Game room management class
+└── README.md           # This file
 ```
 
-## API Information
+## Architecture
 
-This game uses the **Open Trivia Database** (free API):
-- Endpoint: `https://opentdb.com/api.php`
-- No API key required
-- Provides 5 random questions per game session
-- Questions include: Multiple choice, True/False, various categories
+### Frontend
+- **HTML**: Responsive screens for lobby, waiting, game, and leaderboard
+- **CSS**: Terminal-inspired dark theme with interactive elements
+- **JavaScript**: Socket.io client for real-time communication
+
+### Backend
+- **Express**: HTTP server for serving frontend and API
+- **Socket.io**: Real-time bidirectional communication
+- **GameSession**: Manages individual game rooms and player state
+
+## API Events
+
+### Client → Server
+- `create-room` - Host creates a new game room
+- `join-room` - Player joins an existing room
+- `start-game` - Host initiates the game
+- `answer-question` - Player submits an answer
+
+### Server → Client
+- `players-updated` - Room player list changed
+- `host-changed` - Host transferred to another player
+- `game-started` - Game begins, first question displayed
+- `question` - New question displayed
+- `player-answered` - Someone submitted an answer
+- `answer-revealed` - Correct answer and results shown
+- `game-finished` - Game complete, leaderboard displayed
 
 ## Customization
 
 ### Change Question Count
-In `game.js`, modify the API URL in `fetchQuestions()`:
+In `server/index.js`, modify the API URL in `fetchQuestions()`:
 ```javascript
 // Change 10 to desired number
 const response = await fetch('https://opentdb.com/api.php?amount=10&type=multiple');
 ```
 
-### Add Question Categories
+### Adjust Timeout
+In `server/index.js`, change `QUESTION_TIMEOUT`:
 ```javascript
-// Add category parameter (see Open Trivia DB for category codes)
-const response = await fetch('https://opentdb.com/api.php?amount=5&category=9&type=multiple');
+const QUESTION_TIMEOUT = 30000; // milliseconds
 ```
 
-### Adjust Scoring
-In `game.js`, change the points in `answerQuestion()`:
+### Modify Max Players
+In `server/index.js`, update the player limit check:
 ```javascript
-this.score += 10;  // Change 10 to different point value
+if (session.players.size >= 20) {
+  // Change 20 to desired max
+}
 ```
+
+### Change Points Per Answer
+In `server/GameSession.js`, modify the score in `recordAnswer()`:
+```javascript
+player.score += 10; // Change 10 to different points
+```
+
+## Hosting
+
+### Local Network Testing
+1. Find your machine's IP: `ipconfig getifaddr en0` (Mac/Linux)
+2. Open `http://YOUR_IP:3000` on other devices
+
+### Public Deployment (Heroku Example)
+1. Create a Heroku app: `heroku create your-app-name`
+2. Push code: `git push heroku main`
+3. Open: `heroku open`
+
+## Troubleshooting
+
+### "Connection refused" error
+- Make sure server is running: `npm run start:server`
+- Check if port 3000 is available
+- For remote connections, ensure firewall allows port 3000
+
+### Players not syncing
+- Check browser console for errors (F12)
+- Verify Socket.io connection shows in Network tab
+- Restart the server
+
+### Questions not loading
+- Check internet connection
+- Verify Open Trivia API is accessible
+- Try refreshing the page
 
 ## Known Limitations
 
 - Internet connection required for trivia questions
-- Questions are English only (default API language)
-- No user authentication or persistent game history
-- No difficulty selection (random mix of difficulties)
+- Questions are English only
+- Maximum 20 players per room (configurable)
+- Server must be restarted to clear old rooms
 
 ## Future Enhancements
 
-- [ ] Difficulty selection
+- [ ] Persistent game history/leaderboards
+- [ ] Different difficulty levels
 - [ ] Category selection
-- [ ] Leaderboard
-- [ ] Local storage for game history
-- [ ] Difficulty-based scoring
-- [ ] Timed questions
-- [ ] Multiplayer mode
+- [ ] Timed rankings (daily/weekly)
+- [ ] Player avatars and profiles
+- [ ] Chat between players
+- [ ] Spectator mode
+- [ ] Mobile app versions
+- [ ] Database integration for stats
 
 ## License
 
-This project is open source and available under the MIT License.
+MIT License - feel free to use and modify
 
 ## Credits
 
-- Trivia questions provided by [Open Trivia Database](https://opentdb.com/)
-- Terminal theme inspired by GitHub's dark mode
->>>>>>> d859a39 (Initial commit: Terminal Trivia Quiz Game)
+- Trivia questions: [Open Trivia Database](https://opentdb.com/)
+- Terminal theme inspiration: GitHub Dark Mode
+
